@@ -1,0 +1,79 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "l-rettberg",
+      "name": "L Rettberg",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/13290195?v=4",
+      "profile": "https://github.com/l-rettberg",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "KarasIlia",
+      "name": "Ilia Karas",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/46646536?v=4",
+      "profile": "https://github.com/KarasIlia",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "EgorKolyshkin",
+      "name": "Колышкин Егор",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/26576806?v=4",
+      "profile": "https://github.com/EgorKolyshkin",
+      "contributions": [
+        "ideas",
+        "code"
+      ]
+    },
+    {
+      "login": "Gray-Wind",
+      "name": "Ilia Kolo",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4902794?v=4",
+      "profile": "https://github.com/Gray-Wind",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "davidlamys",
+      "name": "David Lam",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/1642110?v=4",
+      "profile": "https://github.com/davidlamys",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "shaahin",
+      "name": "Shahin Katebi",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1235629?v=4",
+      "profile": "https://shaahin.us",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "aKANJx",
+      "name": "Jean Paul Marinho",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6733270?v=4",
+      "profile": "http://akanj.com",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "ChessClockSwift",
+  "projectOwner": "joanb",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}

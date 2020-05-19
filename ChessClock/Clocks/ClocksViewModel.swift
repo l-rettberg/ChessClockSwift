@@ -9,9 +9,15 @@
 import Foundation
 
 struct ClocksViewModel: Equatable {
-    let running: CurrentRunning
-    let topTime: String
-    let bottomTime: String
+    let running: RunningState
+    let topTime: Int
+    let bottomTime: Int
+    var topTimeText: String {
+        return String(topTime)
+    }
+    var bottomTimeText: String {
+        return String(bottomTime)
+    }
 
     static func == (lhs: ClocksViewModel, rhs: ClocksViewModel) -> Bool {
         return (lhs.running == rhs.running &&
@@ -20,9 +26,24 @@ struct ClocksViewModel: Equatable {
     }
 }
 
-enum CurrentRunning {
+enum RunningState {
     case top
     case bottom
     case paused
     case reseted
+    case resumed
+    init(event: ClocksEvents) {
+        switch event {
+        case .topRunning:
+            self = .top
+        case .bottomRunning:
+            self = .bottom
+        case .restart:
+            self = .reseted
+        case .pause:
+            self = .paused
+        case .resume:
+            self = .resumed
+        }
+    }
 }

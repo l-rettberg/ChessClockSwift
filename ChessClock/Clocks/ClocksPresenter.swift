@@ -15,66 +15,54 @@ enum ClocksEvents {
     case bottomRunning
     case pause
     case restart
+    case resume
 }
 
+let kStartingTime = 500
+
 class ClocksPresenter {
-    
+
     let view: ClockView!
     let clocksStateBehaviourSubject = BehaviorSubject<ClocksEvents>(value: .pause)
     let disposeBag = DisposeBag()
-    
+
     init(view: ClockView) {
+        let startState = ClocksViewModel(running: .paused, topTime: kStartingTime, bottomTime: kStartingTime)
         self.view = view
-        Observable<ClocksViewModel?>.concat(
-            Observable.just(ClocksViewModel(running: CurrentRunning.paused, topTime: "500", bottomTime: "500")),
-            Observable.merge(
-                Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
-                    .withLatestFrom(clocksStateBehaviourSubject.asObservable())
-                    .map { event -> ClocksViewModel in
-                        let running: CurrentRunning = {
-                            switch event {
-                            case .bottomRunning:
-                                return .bottom
-                            case .topRunning:
-                                return .top
-                            case .pause:
-                                return .paused
-                            case .restart:
-                                return .reseted
-                            }
-                        }()
-                        return ClocksViewModel(running: running, topTime: "500", bottomTime: "500")
-                }
-            )
-            )
-            .scan(nil, accumulator: { (previous, current) -> ClocksViewModel in
-                guard previous != nil else { return current! }
-                var top = previous!.topTime
-                var bottom = previous!.bottomTime
-                switch current?.running ?? previous!.running {
+        Observable<Int>.interval(.seconds(1), scheduler: MainScheduler.instance)
+            .withLatestFrom(clocksStateBehaviourSubject.asObservable())
+            .map { event -> ClocksViewModel in
+                let running = RunningState(event: event)
+                return ClocksViewModel(running: running, topTime: kStartingTime, bottomTime: kStartingTime)
+            }
+            .startWith(startState)
+            .scan(startState, accumulator: { (previous, current) -> ClocksViewModel in
+                var currentRunning = current.running
+                currentRunning = currentRunning == .resumed ? previous.running : currentRunning
+                var top = previous.topTime
+                var bottom = previous.bottomTime
+                switch currentRunning {
                 case .top:
-                    var toInt = Int(top)!
-                    toInt -= 1
-                    top = String(toInt)
+                    top = top >= 1 ? top - 1 : 0
                 case .bottom:
-                    var toInt = Int(bottom)!
-                    toInt -= 1
-                    bottom = String(toInt)
+                    bottom = bottom >= 1 ? bottom - 1 : 0
                 case .paused:
-                    return previous!
+                    return previous
                 case .reseted:
-                    return ClocksViewModel(running: CurrentRunning.reseted, topTime: "500", bottomTime: "500")
+                    return ClocksViewModel(running: .reseted, topTime: kStartingTime, bottomTime: kStartingTime)
+                case .resumed:
+                    break
                 }
-                return ClocksViewModel(running: current?.running ?? previous!.running, topTime: top, bottomTime: bottom)
+                return ClocksViewModel(running: currentRunning, topTime: top, bottomTime: bottom)
             })
             .distinctUntilChanged()
             .debug("interval")
-            .subscribe(onNext: { viewModel in
-                view.render(viewModel: viewModel!)
+            .subscribe(onNext: { [weak view] viewModel in
+                view?.render(viewModel: viewModel)
             }).disposed(by: disposeBag)
     }
 }
 
-protocol ClockView {
+protocol ClockView: class {
     func render(viewModel: ClocksViewModel)
 }
